@@ -563,7 +563,14 @@ function showResults() {
   drawStatusDisplay();
 }
 
-function mousePressed() {
+function isUiEventTarget(target) {
+  // Alteração pontual: preserva o arranque por clique no canvas, mas impede que cliques
+  // nos botões/painéis da interface sejam interpretados pelo p5 como início de jogo.
+  return !!(target && target.closest && target.closest('#appNav, #panels, .modal, button, input, textarea, select, a'));
+}
+
+function mousePressed(event) {
+  if (isUiEventTarget(event && event.target)) return;
   if (!started) startGameFromUserGesture();
 }
 

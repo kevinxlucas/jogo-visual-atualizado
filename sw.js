@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jogo-visual-cache-v2';
+const CACHE_NAME = 'jogo-visual-cache-v3';
 const CORE_ASSETS = [
   './', './index.html', './styles.css', './app.js', './config.js', './manifest.webmanifest',
   './favicon.svg', './apple-touch-icon.svg', './vendor/p5.min.js', './vendor/p5.sound.min.js'

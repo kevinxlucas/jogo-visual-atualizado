@@ -171,7 +171,7 @@ th { position: sticky; top: 0; background: #f8fafc; z-index: 1; }
   padding: 0.75rem;
   font: inherit;
 }
-.playing #panels .panel:not(#resultsPanel) { display: none !important; }
+/* Os painéis continuam acessíveis durante o jogo; o botão Jogar pode esconder a interface visualmente via fullscreen, mas Dashboard/Histórico permanecem disponíveis. */
 @media (max-width: 760px) {
   #appNav { gap: 0.25rem; padding-top: 0.35rem; }
   .brand { width: 100%; }
