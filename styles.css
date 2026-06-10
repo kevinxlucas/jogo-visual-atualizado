@@ -1,0 +1,189 @@
+/* Jogo Visual — camada visual/UI adicionada sem alterar a mecânica central do p5.js. */
+:root {
+  color-scheme: light;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --nav-bg: rgba(255, 255, 255, 0.92);
+  --nav-border: rgba(15, 23, 42, 0.12);
+  --panel-bg: rgba(255, 255, 255, 0.96);
+  --text: #111827;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --ok: #0f766e;
+  --warn: #b45309;
+  --bad: #b91c1c;
+}
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  background: #111827;
+  color: var(--text);
+  touch-action: manipulation;
+}
+canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+#appNav {
+  position: fixed;
+  top: env(safe-area-inset-top, 0);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.5rem max(0.65rem, env(safe-area-inset-right)) 0.5rem max(0.65rem, env(safe-area-inset-left));
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--nav-border);
+  backdrop-filter: blur(10px);
+}
+.brand { margin-right: 0.25rem; white-space: nowrap; }
+button {
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  padding: 0.48rem 0.72rem;
+  font-size: 0.9rem;
+  min-height: 38px;
+  cursor: pointer;
+}
+button.secondary { background: #475569; }
+button:active { transform: translateY(1px); }
+#syncBadge {
+  margin-left: auto;
+  border-radius: 999px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  background: #475569;
+}
+#syncBadge.synced { background: var(--ok); }
+#syncBadge.pending { background: var(--warn); }
+#syncBadge.error { background: var(--bad); }
+#panels {
+  position: fixed;
+  z-index: 4;
+  left: 0;
+  right: 0;
+  top: calc(56px + env(safe-area-inset-top, 0));
+  bottom: 0;
+  pointer-events: none;
+  overflow: auto;
+}
+.panel {
+  width: min(1120px, calc(100vw - 1rem));
+  margin: 0.6rem auto 2rem;
+  background: var(--panel-bg);
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
+  padding: 1rem;
+  pointer-events: auto;
+}
+.hidden { display: none !important; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 0.75rem;
+}
+.stat {
+  border-radius: 16px;
+  padding: 0.8rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+.stat span { display: block; color: var(--muted); font-size: 0.8rem; }
+.stat strong { font-size: 1.3rem; }
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.chartCard {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 0.75rem;
+}
+.chartCard canvas {
+  position: static;
+  display: block;
+  width: 100%;
+  height: 220px;
+  background: #fff;
+  border-radius: 12px;
+}
+.tableWrap { overflow: auto; max-height: 62vh; border-radius: 16px; border: 1px solid #e2e8f0; }
+table { width: 100%; border-collapse: collapse; background: #fff; font-size: 0.88rem; }
+th, td { padding: 0.55rem; border-bottom: 1px solid #e2e8f0; text-align: left; white-space: nowrap; }
+th { position: sticky; top: 0; background: #f8fafc; z-index: 1; }
+.muted { color: var(--muted); font-size: 0.9rem; }
+.ok { color: var(--ok); font-weight: 700; }
+.warn { color: var(--warn); font-weight: 700; }
+.bad { color: var(--bad); font-weight: 700; }
+.configBox {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+.configBox input {
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  min-width: 0;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(5px);
+}
+.modalCard {
+  width: min(520px, calc(100vw - 2rem));
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+  padding: 1.1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+.modalCard input,
+.modalCard textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 0.75rem;
+  font: inherit;
+}
+.playing #panels .panel:not(#resultsPanel) { display: none !important; }
+@media (max-width: 760px) {
+  #appNav { gap: 0.25rem; padding-top: 0.35rem; }
+  .brand { width: 100%; }
+  button { font-size: 0.78rem; padding: 0.42rem 0.5rem; min-height: 34px; }
+  #syncBadge { margin-left: 0; }
+  #panels { top: calc(96px + env(safe-area-inset-top, 0)); }
+  .panel { border-radius: 18px; padding: 0.75rem; }
+}
+@media print {
+  #appNav, #ratingModal, #exportModal { display: none !important; }
+  body { overflow: visible; background: white; }
+  canvas { display: none; }
+  #panels { position: static; overflow: visible; }
+  .panel { box-shadow: none; border: 0; width: auto; }
+}
